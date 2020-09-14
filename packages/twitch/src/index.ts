@@ -69,6 +69,9 @@ export { HelixBanEvent } from './API/Helix/Moderation/HelixBanEvent';
 export { HelixModerator } from './API/Helix/Moderation/HelixModerator';
 export { HelixModeratorEvent } from './API/Helix/Moderation/HelixModeratorEvent';
 
+export { HypeTrainContributor } from './API/Helix/HypeTrain/HypeTrainContributor';
+export { HypeTrainEvent } from './API/Helix/HypeTrain/HypeTrainEvent';
+
 export { HelixSubscription } from './API/Helix/Subscriptions/HelixSubscription';
 export { HelixSubscriptionEvent } from './API/Helix/Subscriptions/HelixSubscriptionEvent';
 

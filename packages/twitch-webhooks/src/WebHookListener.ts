@@ -11,8 +11,10 @@ import {
 	HelixStream,
 	HelixSubscriptionEvent,
 	HelixUser,
+	HypeTrainEvent,
 	UserIdResolvable
 } from 'twitch';
+import { HypeTrainEventSubscription } from './Subscriptions/HypeTrainEventSubscription';
 import { ConnectionAdapter } from './Adapters/ConnectionAdapter';
 import { LegacyAdapter, WebHookListenerConfig } from './Adapters/LegacyAdapter';
 import { ConnectCompatibleApp } from './ConnectCompatibleApp';
@@ -220,6 +222,31 @@ export class WebHookListener {
 		const userId = extractUserId(user);
 
 		const subscription = new FollowsToUserSubscription(userId, handler, this, validityInSeconds);
+		await subscription.start();
+		this._subscriptions.set(subscription.id, subscription);
+
+		return subscription;
+	}
+
+	/**
+	 * Subscribes to events representing a hypetrain event.
+	 *
+	 * @param broadcasterId The broadcaster / channel for which to get notifications about the hypetrain events.
+	 * @param handler The function that will be called for any new notifications.
+	 * @param validityInSeconds The validity of the WebHook, in seconds.
+	 *
+	 * Please note that this doesn't mean that you don't get any notifications after the given time. The hook will be automatically refreshed.
+	 *
+	 * This is meant for debugging issues. Please don't set it unless you know what you're doing.
+	 */
+	async subscribeToHypeTrainEvents(
+		broadcasterId: UserIdResolvable,
+		handler: (hypeTrain: HypeTrainEvent) => void,
+		validityInSeconds = this._hookValidity
+	) {
+		const userId = extractUserId(broadcasterId);
+
+		const subscription = new HypeTrainEventSubscription(userId, handler, this, validityInSeconds);
 		await subscription.start();
 		this._subscriptions.set(subscription.id, subscription);
 
